@@ -21,15 +21,21 @@ class PerfilesController extends Controller
         return view('admin.perfiles.crear');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //Función para guardar el perfil
     public function store(Request $request)
     {
-        //
+        //Validar campos
+        $request->validate([
+            'nombre'=>'required|unique:perfiles'
+        ]);
+
+        //Guardar en la Base de Datos
+        $perfil = Perfil::create([
+            'nombre'=>$request->nombre
+        ]);
+
+        //Redireccionar
+        return redirect()->route('perfiles.index');
     }
 
     /**
