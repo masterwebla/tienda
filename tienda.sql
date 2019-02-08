@@ -1,22 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 06-02-2019 a las 18:52:03
--- Versión del servidor: 10.1.37-MariaDB
--- Versión de PHP: 7.3.0
+-- Servidor: localhost:8889
+-- Tiempo de generación: 08-02-2019 a las 01:53:30
+-- Versión del servidor: 5.7.23
+-- Versión de PHP: 7.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `tienda`
@@ -94,6 +86,14 @@ CREATE TABLE `estados_productos` (
   `nombre` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `estados_productos`
+--
+
+INSERT INTO `estados_productos` (`id`, `nombre`) VALUES
+(1, 'Disponible'),
+(2, 'No disponible');
+
 -- --------------------------------------------------------
 
 --
@@ -107,6 +107,14 @@ CREATE TABLE `imagenes_productos` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `imagenes_productos`
+--
+
+INSERT INTO `imagenes_productos` (`id`, `archivo`, `producto_id`, `created_at`, `updated_at`) VALUES
+(1, 'https://images.eltiempo.digital/files/image_184_123/uploads/2018/09/11/5b9841475b688.jpeg', 1, '2019-02-08 01:49:05', '2019-02-08 01:49:05'),
+(2, 'https://images.eltiempo.digital/files/image_184_123/files/crop/uploads/2019/02/07/5c5cdbd63b916.r_1549589903803.0-16-590-410.png', 1, '2019-02-08 01:49:05', '2019-02-08 01:49:05');
 
 -- --------------------------------------------------------
 
@@ -197,8 +205,9 @@ CREATE TABLE `perfiles` (
 --
 
 INSERT INTO `perfiles` (`id`, `nombre`) VALUES
-(1, 'Admin'),
-(2, 'Operador');
+(1, 'Administrador'),
+(2, 'Operario'),
+(5, 'Cliente');
 
 -- --------------------------------------------------------
 
@@ -217,6 +226,16 @@ CREATE TABLE `productos` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `nombre`, `cantidad`, `precio`, `descripcion`, `descripcion_detallada`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 'Mandarinas', 12, 750, 'Fruta acida', 'Fruta demasiado acida', 1, '2019-02-08 00:47:45', '2019-02-08 00:47:45'),
+(3, 'Peras', 23, 234, 'sdasda', 'sadasd', 2, '2019-02-08 06:10:18', '2019-02-08 06:10:18'),
+(4, 'Maracuya', 25, 670, 'Fruta acida', 'dfasdfdsf', 1, '2019-02-08 06:18:23', '2019-02-08 06:18:23'),
+(5, 'Lulos', 12, 456, 'sdsds', 'sdsd', 1, '2019-02-08 06:19:47', '2019-02-08 06:19:47');
 
 -- --------------------------------------------------------
 
@@ -378,13 +397,13 @@ ALTER TABLE `estados_pedidos`
 -- AUTO_INCREMENT de la tabla `estados_productos`
 --
 ALTER TABLE `estados_productos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes_productos`
 --
 ALTER TABLE `imagenes_productos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `metodos_pago`
@@ -408,13 +427,13 @@ ALTER TABLE `ordenes`
 -- AUTO_INCREMENT de la tabla `perfiles`
 --
 ALTER TABLE `perfiles`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
@@ -466,8 +485,3 @@ ALTER TABLE `productos`
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ciudad_id_foreign` FOREIGN KEY (`ciudad_id`) REFERENCES `ciudades` (`id`),
   ADD CONSTRAINT `users_perfil_id_foreign` FOREIGN KEY (`perfil_id`) REFERENCES `perfiles` (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
