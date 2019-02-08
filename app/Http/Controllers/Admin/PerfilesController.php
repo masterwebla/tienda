@@ -35,51 +35,46 @@ class PerfilesController extends Controller
         ]);
 
         //Redireccionar
-        return redirect()->route('perfiles.index');
+        return redirect()->route('perfiles.index')->with('mensaje','Perfil creado correctamente');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
-        //
+        $perfil = Perfil::find($id);
+        return view('admin.perfiles.editar',compact('perfil'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //Función para actualizar el perfil
     public function update(Request $request, $id)
     {
-        //
+        //Validar datos
+        $request->validate([
+            'nombre'=>'required'
+        ]);
+
+        //Actualizar
+        $perfil = Perfil::find($id);
+        $perfil->nombre = $request->nombre;
+        $perfil->save();
+
+        //Redireccionar
+        return redirect()->route('perfiles.index')->with('mensaje','Perfil actualizado correctamente');
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //Función para borrar un perfil
     public function destroy($id)
     {
-        //
+        $perfil = Perfil::find($id);
+        $perfil->delete();
+
+        //Redireccionar
+        return redirect()->route('perfiles.index')->with('mensaje','Perfil borrado correctamente');
     }
 }
