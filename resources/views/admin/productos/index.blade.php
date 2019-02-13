@@ -27,10 +27,11 @@
 						<td>{{$producto->descripcion}}</td>
 						<td>{{$producto->estado->nombre}}</td>
 						<td>
-							<a class="btn btn-info" href="{{route('imagenes',$producto->id)}}"><i class="fa fa-image"></i></a>
-							<a class="btn btn-warning" href="{{route('productos.edit',$producto->id)}}"><i class="fa fa-edit"></i></a>
+							
 
 							{!!Form::open(['route'=>['productos.destroy',$producto->id],'method'=>'delete'])!!}
+								<a class="btn btn-info" href="{{route('imagenes',$producto->id)}}"><i class="fa fa-image"></i></a>
+								<a class="btn btn-warning" href="{{route('productos.edit',$producto->id)}}"><i class="fa fa-edit"></i></a>
 								<button class="btn btn-danger" type="submit" onClick="return confirm('Eliminar producto?')"><i class="fa fa-trash"></i></button>
 							{!!Form::close()!!}
 							
