@@ -1,85 +1,81 @@
 <?php
-
+ 
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Estadopedido;
 
 class EstadospedidosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Funcion para listar los Estados de Pedido
     public function index()
     {
-        //
+        $estados_pedidos = Estadopedido::Paginate(20);
+        return view('admin.estadospedidos.index',compact('estados_pedidos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //Función para guardar el estado del pedido
     public function store(Request $request)
     {
-        //
+        // Validar campos
+        $request->validate([
+            'nombre'=>'required|unique:estados_pedidos'
+        ]);
+
+        // Gurdar en la base de datos
+        $estado_pedido = Estadopedido::create([
+            'nombre'=>$request->nombre
+        ]);
+
+        //Redireccionar
+        return redirect()->route('estadospedidos.index')->with('mensaje','Estado Creado correctamente');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
-        //
+        $estado_pedido = Estadopedido::find($id);
+        $estados_pedidos = Estadopedido::Paginate(20);
+        return view('Admin.estadospedidos.editar',compact('estado_pedido', 'estados_pedidos'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
-        //
+        // Validar Datos
+        $request->validate([
+            'nombre'=>'required'
+        ]);
+
+        
+        $estado_pedido = Estadopedido::find($id);
+        $estado_pedido->nombre = $request->nombre;
+        $estado_pedido->save();
+
+        // Redireccionar
+        return redirect()->route('estadospedidos.index')->with('mensaje','Estado Actualizado correctamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    // Función para borrar un estado de pedido
     public function destroy($id)
     {
-        //
+        $estado_pedido = Estadopedido::find($id);
+        $estado_pedido->delete();
+
+        // redirecciona
+        return redirect()->route('estadospedidos.index')->with('mensdaje','Estado Eliminado Correctamente');
     }
 }
