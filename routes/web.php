@@ -12,6 +12,8 @@ Route::get('/admin/imagenes/{id}','Admin\ImagenesController@index')->name('image
 Route::post('/admin/imagenes/','Admin\ImagenesController@store')->name('img-guardar');
 Route::delete('/admin/imagenes/{id}','Admin\ImagenesController@destroy')->name('img-borrar');
 
+Route::resource('/admin/metodos','Admin\MetodospagoController');
+
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

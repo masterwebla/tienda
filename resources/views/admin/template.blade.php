@@ -381,7 +381,9 @@
             <!-- Container fluid  -->
             <div class="container-fluid">
                 <!-- Start Page Content -->
-                @yield('contenido')
+                <div class="row">
+                    @yield('contenido')
+                </div>                
                 <!-- End PAge Content -->
             </div>
             <!-- End Container fluid  -->
@@ -405,6 +407,8 @@
     <script src="{{asset('js/lib/sticky-kit-master/dist/sticky-kit.min.js')}}"></script>
     <!--Custom JavaScript -->
     <script src="{{asset('js/scripts.js')}}"></script>
+    <!-- Crear bloque de código javascript de cada vista, se debe hacer después de las liberrías -->
+    @yield('script')
 
 </body>
 
