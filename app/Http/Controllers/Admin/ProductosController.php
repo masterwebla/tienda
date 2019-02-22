@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Producto;
 use App\Estadoproducto;
+use App\Imagenproducto;
 
 class ProductosController extends Controller
 {
@@ -91,6 +92,10 @@ class ProductosController extends Controller
     public function destroy($id)
     {
         $producto = Producto::find($id);
+        //Borrar imágenes del producto
+        $imagenes = Imagenproducto::where('producto_id',$id)->delete();
+
+        //Borrar el producto
         $producto->delete();
 
         //Redireccionar

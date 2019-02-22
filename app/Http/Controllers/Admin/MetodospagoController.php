@@ -12,7 +12,7 @@ class MetodospagoController extends Controller
     //Función para listar
     public function index()
     {
-        $metodos = Metodopago::paginate(10);
+        $metodos = Metodopago::paginate(7);
         return view('admin.metodos.index',compact('metodos'));
     }
 
@@ -51,14 +51,12 @@ class MetodospagoController extends Controller
         return redirect()->route('metodos.index')->with('mensaje','Método actualizado correctamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //Función para borrar un método de pago
     public function destroy($id)
     {
-        //
+        $metodo = Metodopago::find($id);
+        $metodo->delete();
+
+        return $metodo->nombre;
     }
 }

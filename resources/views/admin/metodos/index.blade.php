@@ -17,9 +17,14 @@
 						</div>
 						<div class="form-group">
 							<label for="descripcion">Descripción: </label>
-							{!! Form::text('descripcion',null,['class'=>'form-control','placeholder'=>'Ingresar descripcion...','required'=>'required','id'=>'descrip_in'])
+							{!! Form::text('descripcion',null,['class'=>'form-control','placeholder'=>'Ingresar descripcion...','required'=>'required','id'=>'descrip_in','onblur'=>'mostrarCampo1()'])
 							!!}
-						</div>					
+						</div>
+						<div class="form-group" id="campo1">
+							<label for="campo1">Campo1: </label>
+							{!! Form::text('campo1',null,['class'=>'form-control','placeholder'=>'Ingresar campo1...','required'=>'required','id'=>'campo1_in'])
+							!!}
+						</div>
 						<!-- Se define tipo button para que no haga submit al formulario -->
 						<button type="button" id="btn-guardar" class="btn btn-success btn-block"><i class="fa fa-save"></i> Guardar</button>
 					</div>
@@ -30,12 +35,12 @@
 			<br><br>			
 
 			<!-- TABLA -->
-			<table id="tablametodos" class="table table-striped table-hover">
+			<table id="tablametodos" class="display nowrap table table-hover table-striped table-bordered"  class="table table-striped table-hover">
 				<thead>
 					<tr>
 						<td>Nombre</td>
 						<td>Descripción</td>
-						<td>Editar</td>
+						<td>Opciones</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -43,7 +48,12 @@
 						<tr>
 							<td>{{$metodo->nombre}}</td>
 							<td>{{$metodo->descripcion}}</td>
-							<td><a onclick="consultar({{$metodo->id}})" class="btn btn-warning" data-toggle="modal" data-target="#modaleditar"><i class="fa fa-edit"></i></a></td>
+							<td>								
+								<a onclick="consultar({{$metodo->id}})" class="btn btn-primary" data-toggle="modal" data-target="#modaleditar"><i class="fa fa-edit"></i></a>
+								<!-- this, palabra reservada de javascript que hace referencia al elemento donde estoy -->
+								<a onclick="eliminar({{$metodo->id}},this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>	
+							</td>
+
 						</tr>
 					@endforeach				
 				</tbody>
@@ -60,7 +70,51 @@
 @endsection
 
 @section('script')
+
 	<script>
+		//Inicializar DataTable
+		$('#tablametodos').DataTable({
+			paging:   false,
+			language: {
+	            "sProcessing":     "Procesando...",
+			    "sLengthMenu":     "Mostrar _MENU_ registros",
+			    "sZeroRecords":    "No se encontraron resultados",
+			    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+			    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+			    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+			    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			    "sInfoPostFix":    "",
+			    "sSearch":         "Buscar:",
+			    "sUrl":            "",
+			    "sInfoThousands":  ",",
+			    "sLoadingRecords": "Cargando...",
+			    "oPaginate": {
+			        "sFirst":    "Primero",
+			        "sLast":     "Último",
+			        "sNext":     "Siguiente",
+			        "sPrevious": "Anterior"
+			    },
+			    "oAria": {
+			        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			    }
+	        },
+	        dom: 'Bfrtip',
+	        buttons: [
+	            'copy', 'csv', 'excel', 'pdf', 'print'
+	        ]
+	    });
+
+		//Hacer invisible el DIV con el input de campo1
+		$('#campo1').hide();
+
+		//Borrar detectando clic con JQuery
+		//$("#descrip_in").click(function(){ $('#campo1').show(); });
+
+		function mostrarCampo1(){
+			$('#campo1').show();
+		}
+
 		$("#btn-guardar").click(function(){
 			//Detectar valor ingresado en cada input
 			var token_in = "{{ csrf_token() }}";
@@ -75,12 +129,13 @@
 					//La variable datos viene de store
 					console.log(metodo);
 					//Agregar nueva fila a la tabla con los nuevos datos
-					$('#tablametodos').append('<tr><td>'+metodo.nombre+'</td><td>'+metodo.descripcion+'</td><td><a class="btn btn-warning"><i class="fa fa-edit"></i></a></td></tr>');
+					$('#tablametodos').append('<tr><td>'+metodo.nombre+'</td><td>'+metodo.descripcion+'</td><td><a onclick="consultar('+metodo.id+')" class="btn btn-primary" data-toggle="modal" data-target="#modaleditar"><i class="fa fa-edit"></i></a> <a onclick="eliminar('+metodo.id+',this)" class="btn btn-danger"><i class="fa fa-trash"></i></a></td></tr>');
 					//$('#tablametodos').html(metodos);
 				}
 			});
 		});
 
+		//Función para hacer el AJAX que consulta los datos del método que se va a editar
 		function consultar(id_in){
 			//AJAX para abrir la ruta metodos.edit y retornara datos del método que se va a editar y los mostrará en el formulario
 			$.ajax({
@@ -100,5 +155,26 @@
 			});
 
 		}
+
+		//Función para hacer el AJAX que elimina un método
+		function eliminar(id_in,objeto){
+			var r = confirm('Eliminar metodo?');
+			if (r == true) {
+				var token_in = "{{ csrf_token() }}";
+				//AJAX para abrir la ruta metodos.delete
+				$.ajax({
+					url:'metodos/'+id_in,
+					data:{_token:token_in},
+					type:"DELETE",
+					success:function(metodo){
+						console.log(metodo)
+						//Borrar la fila de la tabla, con el primer parent borrar celda, con el segundo parent borrar fila
+						$(objeto).parent().parent().remove();
+						//alert('Metodo '+metodo+' borrado correctamente');					
+					}
+				});
+			}
+		}
+
 	</script>
 @endsection

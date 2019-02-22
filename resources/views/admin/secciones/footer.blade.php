@@ -1,0 +1,1 @@
+<footer class="footer"> © 2019 Todos los derechos reservados. Tienda S.A.S</footer>
