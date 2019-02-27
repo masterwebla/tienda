@@ -49,7 +49,7 @@
 							<td>{{$metodo->nombre}}</td>
 							<td>{{$metodo->descripcion}}</td>
 							<td>								
-								<a onclick="consultar({{$metodo->id}})" class="btn btn-primary" data-toggle="modal" data-target="#modaleditar"><i class="fa fa-edit"></i></a>
+								<a onclick="consultar({{$metodo->id}})" class="btn btn-info" data-toggle="modal" data-target="#modaleditar"><i class="fa fa-edit"></i></a>
 								<!-- this, palabra reservada de javascript que hace referencia al elemento donde estoy -->
 								<a onclick="eliminar({{$metodo->id}},this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>	
 							</td>

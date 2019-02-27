@@ -10,11 +10,18 @@ use App\Imagenproducto;
 
 class ProductosController extends Controller
 {
-    //Función para listar los productos
-    public function index()
+    //Función para listar los productos con filtros
+    public function index(Request $request)
     {
-        $productos = Producto::paginate(20);
-        return view('admin.productos.index',compact('productos'));
+        $nombre = $request->nombre;
+        $precio = $request->precio;
+        $estado_id = $request->estado_id;
+        $paginas = 20;
+        if($request->paginas)
+            $paginas = $request->paginas;
+        $productos = Producto::nombre($nombre)->precio($precio)->estado($estado_id)->paginate($paginas);
+        $estados = Estadoproducto::pluck('nombre','id');
+        return view('admin.productos.index',compact('productos','estados'));
     }
 
     //Función para mostrar el formulario para crear un nuevo perfil

@@ -16,7 +16,7 @@
 </div>
 <div class="form-group">
 	<label for="descripcion_detallada">Descripción detallada</label>
-	{!! Form::textarea('descripcion_detallada',null,['class'=>'form-control','placeholder'=>'Ingresar descripcion_detallada...','required'=>'required']) !!}
+	{!! Form::textarea('descripcion_detallada',null,['class'=>'form-control','placeholder'=>'Ingresar descripcion detallada...','required'=>'required']) !!}
 </div>
 <div class="form-group">
 	<label for="estado_id">Estado</label>

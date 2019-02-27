@@ -15,4 +15,22 @@ class Producto extends Model
     {
         return $this->belongsTo('App\Estadoproducto');
     }
+
+    //Función Scope para buscar por nombre
+    public function scopeNombre($query,$nombre){
+    	if($nombre)
+    		return $query->where('nombre','LIKE',"%$nombre%");
+    }
+
+    //Función para buscar por precio
+    public function scopePrecio($query,$precio){
+    	if($precio)
+    		return $query->where('precio','<=',$precio);
+    }
+
+    //Función para buscar por precio
+    public function scopeEstado($query,$estado_id){
+    	if($estado_id)
+    		return $query->where('estado_id',$estado_id);
+    }
 }
