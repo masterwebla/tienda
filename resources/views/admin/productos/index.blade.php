@@ -2,19 +2,27 @@
 @section('titulo','Productos')
 @section('contenido')
 	<div class="col-12">
+		<?php
+			//Definir las variables para recordar que se digito en las cajas del filtro
+			$nombre = null; $precio=null;
+			if($_GET){
+				if($_GET['nombre'])
+					$nombre = $_GET['nombre'];
+				if($_GET['precio'])
+					$precio = $_GET['precio'];
+			}						
+		?>
         <div class="card">
-			<h1 class="text-center">PRODUCTOS <a class="btn btn-success" href="{{route('productos.create')}}"><i class="fa fa-plus"></i></a></h1>
+			<h1 class="text-center">PRODUCTOS 
+				<a class="btn btn-success" href="{{route('productos.create')}}"><i class="fa fa-plus"></i></a>
+				{!!Form::open(['route'=>'productos-pdf','method'=>'get','class'=>'form-inline'])!!}
+					{!!Form::hidden('nombre',$nombre)!!}
+					{!!Form::hidden('precio',$precio)!!}
+					<button class="btn btn-warning" type="submit"><i class="fa fa-file-pdf-o"></i></button>
+				{!!Form::close()!!}
+			</h1>
 			<!-- FILTROS -->
 			<div class="text-center">
-				<?php
-					$nombre = null; $precio=null;
-					if($_GET){
-						if($_GET['nombre'])
-							$nombre = $_GET['nombre'];
-						if($_GET['precio'])
-							$precio = $_GET['precio'];
-					}						
-				?>
 				{!!Form::open(['route'=>'productos.index','method'=>'get','class'=>'form-inline'])!!}
 					{!!Form::text('nombre',$nombre,['class'=>'form-control','placeholder'=>'Nombre...'])!!}
 					{!!Form::number('precio',$precio,['class'=>'form-control','placeholder'=>'Precio...'])!!}

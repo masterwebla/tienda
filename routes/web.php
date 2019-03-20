@@ -8,6 +8,8 @@ Route::get('/', function () {
 Route::resource('/admin/perfiles','Admin\PerfilesController');
 Route::resource('/admin/estadospedidos','Admin\EstadospedidosController');
 Route::resource('/admin/productos','Admin\ProductosController');
+Route::get('/productos-pdf','Admin\ProductosController@generarPDF')->name('productos-pdf');
+
 Route::get('/admin/imagenes/{id}','Admin\ImagenesController@index')->name('imagenes');
 Route::post('/admin/imagenes/','Admin\ImagenesController@store')->name('img-guardar');
 Route::delete('/admin/imagenes/{id}','Admin\ImagenesController@destroy')->name('img-borrar');

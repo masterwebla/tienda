@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+//Incluir Mail y ProductoCreado para poder enviar el mail
+use Illuminate\Support\Facades\Mail;
+//Incluir App para generar el PDF
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\View;
+use App\Mail\ProductoCreado;
 use App\Producto;
 use App\Estadoproducto;
 use App\Imagenproducto;
@@ -31,7 +37,7 @@ class ProductosController extends Controller
         return view('admin.productos.crear',compact('estados'));
     }
 
-    //Función para guardar el perfil
+    //Función para guardar el producto
     public function store(Request $request)
     {
         //Validar campos
@@ -51,6 +57,13 @@ class ProductosController extends Controller
             'descripcion_detallada'=>$request->descripcion_detallada,
             'estado_id'=>$request->estado_id,
         ]);
+
+        //Enviar el mail de Nuevo Producto Creado
+        $nombrep = $producto->nombre;
+        $cantidadp = $producto->cantidad;
+        $preciop = $producto->precio;
+        Mail::to('mauricio.rodriguez1016@gmail.com')->send(new ProductoCreado($nombrep,$cantidadp,$preciop));
+
 
         //Redireccionar
         return redirect()->route('productos.index')->with('mensaje','Producto creado correctamente');
@@ -107,5 +120,19 @@ class ProductosController extends Controller
 
         //Redireccionar
         return redirect()->route('productos.index')->with('mensaje','Producto borrado correctamente');
+    }
+
+    //Función para generar PDF de productos
+    public function generarPDF(Request $request){
+        $nombre = $request->nombre;
+        $precio = $request->precio;
+        $productos = Producto::nombre($nombre)->precio($precio)->get();
+        $pdf = App::make('dompdf.wrapper');
+        $vista = View::make('admin.pdfs.productos',compact('productos'));
+        $pdf->loadHTML($vista);
+        //Stream para que abra el PDF en el navegador
+        //return $pdf->stream('productos');
+        //Download para que descargue el PDF
+        return $pdf->download('productos.pdf');
     }
 }
