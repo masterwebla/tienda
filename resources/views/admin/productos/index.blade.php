@@ -19,7 +19,11 @@
 					{!!Form::hidden('nombre',$nombre)!!}
 					{!!Form::hidden('precio',$precio)!!}
 					<button class="btn btn-warning" type="submit"><i class="fa fa-file-pdf-o"></i></button>
+					&nbsp;
+					<a class="btn btn-info" href="{{ route('productos-excel') }}" title="Exportar">Exportar <i class="fa fa-file-excel-o"></i></a>&nbsp;
+					<a class="btn btn-primary" href="{{ route('sol-importar') }}" title="Importar">Importar <i class="fa fa-file-excel-o"></i></a>
 				{!!Form::close()!!}
+
 			</h1>
 			<!-- FILTROS -->
 			<div class="text-center">
