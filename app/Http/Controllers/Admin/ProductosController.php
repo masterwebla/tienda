@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+//Incluir DB
+use Illuminate\Support\Facades\DB;
 //Incluir Mail y ProductoCreado para poder enviar el mail
 use Illuminate\Support\Facades\Mail;
 //Incluir App para generar el PDF
@@ -24,8 +26,68 @@ class ProductosController extends Controller
     }
 
     //Función para listar los productos con filtros
-    public function index(Request $request)
-    {
+    public function index(Request $request){
+
+        //CONSULTA PARA TRAER TODOS LOS PRODUCTOS
+        //EN SQL PURO: $productos = "SELECT * FROM productos";
+        //CON ELOQUENT: $productos = Producto::all();
+
+        //FIND - Función para traer un registro por la llave primaria
+        //SQL: "SELECT * FROM productos WHERE id=1"
+        //CON ELOQUENT:
+        //$productos = Producto::find(1);
+        //return $productos;
+
+        //BUSCAR UN PRODUCTO POR EL NOMBRE
+        //$producto = "SELECT * FROM productos WHERE nombre='Manzana'";
+        //CON ELOQUENT
+        //$producto = Producto::where('nombre','Manzana')->get();
+
+        //TRAER EL VALOR DE UN CAMPO
+        //"SELECT id FROM productos WHERE nombre='Manzana'";
+        //Con Eloquent:
+        //$productos = Producto::where('precio','>',500)->value('precio');
+        //return $productos;
+
+        //SUMAR LOS VALORES DE UN CAMPO
+        //"SELECT SUM('precio') FROM productos WHERE precio>1000";
+        //Con Eloquent
+        //$precio_total = Producto::where('precio','>',1000)->sum('precio');
+        //return $precio_total;
+
+        //CALCULAR EL PROMEDIO
+        //"SELECT AVG('precio') FROM productos"
+        //Con Eloquent
+        //$promedio = Producto::avg('precio');
+        //return $promedio;
+
+        //CONSULTA PARA TRAER CAMPOS ESPECÍFICOS
+        //"SELECT nombre,precio FROM productos WHERE precio between(1000,2000) ORDER BY nombre DESC";
+        //Con Eloquent:
+        //$productos = Producto::select('nombre','precio')
+        //Y Precio >1000    ->where('precio','>',1000)
+        //O                 ->orWhere('nombre','LIKE','M%')
+        //            ->whereBetween('precio',[1000,2000])
+        //            ->orderBy('nombre','desc')
+        //            ->get();
+        //return $productos;
+
+
+        //"SELECT nombre||' - '||cantidad as datos,precio FROM productos" //ORACLE
+        //"SELECT CONCAT(nombre," - ",cantidad) as datos),precio FROM productos" //MySQL
+        //$productos = Producto::select(DB::raw('CONCAT(nombre," - ",cantidad) as datos'),'precio')->get();
+        //return $productos;
+
+        //JOINS
+        $productos = Producto::join("estados_productos","productos.estado_id","=","estados_productos.id")
+                    ->select('productos.precio','estados_productos.nombre')
+                    ->get();
+        return $productos;
+
+
+
+
+        /*
         $nombre = $request->nombre;
         $precio = $request->precio;
         $estado_id = $request->estado_id;
@@ -35,6 +97,7 @@ class ProductosController extends Controller
         $productos = Producto::nombre($nombre)->precio($precio)->estado($estado_id)->paginate($paginas);
         $estados = Estadoproducto::pluck('nombre','id');
         return view('admin.productos.index',compact('productos','estados'));
+        */
     }
 
     //Función para mostrar el formulario para crear un nuevo perfil
